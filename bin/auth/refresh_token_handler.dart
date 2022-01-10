@@ -13,12 +13,24 @@ Handler refreshTokenHandler({TokenManager tokenManager}) =>
 
       final token = verifyJwt(payloadMap['refreshToken']);
       if (token == null) {
-        return Response(400, body: 'Refresh token is not valid.');
+        return Response(400,
+            body: ResponseModel(
+                    status: 400, message: "invalid Refresh token", data: null)
+                .toJson()
+                .toString());
+        ;
       }
 
       final dbToken = await tokenManager.getRefreshToken(token.jwtId);
       if (dbToken == null) {
-        return Response(400, body: 'Refresh token is not recognised.');
+        return Response(400,
+            body: ResponseModel(
+                    status: 400,
+                    message: "refresh token is noot recognized",
+                    data: null)
+                .toJson()
+                .toString());
+        ;
       }
 
       final oldJwt = token;
