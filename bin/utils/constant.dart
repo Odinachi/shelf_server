@@ -8,7 +8,7 @@ import 'package:shelf/shelf.dart';
 
 import '../model/auth/response_model.dart';
 
-final ip = "0.0.0.0";
+final ip = InternetAddressType.IPv4;
 final dotEnv = DotEnv(filePath: '.env');
 final port = int.parse(Platform.environment['PORT'] ?? '8080');
 final issuer = 'Issuer247Hash256';
