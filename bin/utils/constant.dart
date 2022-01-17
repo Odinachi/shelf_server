@@ -11,8 +11,8 @@ import '../model/auth/response_model.dart';
 final ip = "0.0.0.0";
 final dotEnv = DotEnv(filePath: '.env');
 final port = int.parse(Platform.environment['PORT'] ?? '8080');
-final issuer = dotEnv.getDotEnv()["ISSUER"];
-final secret = dotEnv.getDotEnv()['SECRET'];
+final issuer = 'Issuer247Hash256';
+final secret = '23408080822222fffgbhhhhs';
 final jsonHeaders = {HttpHeaders.contentTypeHeader: ContentType.json.mimeType};
 
 hashPassword({String password, String salt}) {
