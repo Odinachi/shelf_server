@@ -4,8 +4,8 @@ class Guardian {
       this.lastname,
       this.gender,
       this.age,
+      this.email,
       this.homeaddress,
-      this.currentclass,
       this.wards,
       this.workaddress});
 
@@ -13,12 +13,13 @@ class Guardian {
   String lastname;
   String gender;
   String age;
+  String email;
   String homeaddress;
   String workaddress;
   List<String> wards;
-  String currentclass;
 
   factory Guardian.fromJson(Map<String, dynamic> json) => Guardian(
+        email: json["email"] == null ? null : json["email"],
         firstname: json["firstname"] == null ? null : json["firstname"],
         lastname: json["lastname"] == null ? null : json["lastname"],
         gender: json["gender"] == null ? null : json["gender"],
@@ -26,8 +27,6 @@ class Guardian {
         homeaddress: json["homeaddress"] == null ? null : json["homeaddress"],
         workaddress: json["workaddress"] == null ? null : json["workaddress"],
         wards: json["wards"] == null ? null : json["wards"],
-        currentclass:
-            json["currentclass"] == null ? null : json["currentclass"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,7 +37,7 @@ class Guardian {
         "homeaddress": homeaddress == null ? null : homeaddress,
         "workaddress": workaddress == null ? null : workaddress,
         "wards": wards == null ? null : wards,
-        "currentclass": currentclass == null ? null : currentclass,
+        "email": email == null ? null : email,
       };
 }
 

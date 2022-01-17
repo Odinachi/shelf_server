@@ -89,7 +89,7 @@ Handler registerHandler({Db db}) {
     }
     var salt = uuid.v4().toString();
     var password = hashPassword(salt: salt, password: newData.password);
-
+    var _profileId;
     SignUpModel signUpModel = SignUpModel(
         username: newData.username,
         firstname: newData.firstname,
@@ -105,20 +105,20 @@ Handler registerHandler({Db db}) {
     if (newData.accountType == 1) {
       var sDbRef = db.collection("students");
       Student _student = Student(
-        firstname: newData.firstname,
-        lastname: newData.lastname,
-        gender: newData.gender,
-        age: newData.age,
-      );
+          firstname: newData.firstname,
+          lastname: newData.lastname,
+          gender: newData.gender,
+          age: newData.age,
+          email: newData.email);
       await sDbRef.insert(_student.toJson());
     } else if (newData.accountType == 2) {
       var gDbRef = db.collection("guardians");
       Guardian _guardian = Guardian(
-        firstname: newData.firstname,
-        lastname: newData.lastname,
-        gender: newData.gender,
-        age: newData.age,
-      );
+          firstname: newData.firstname,
+          lastname: newData.lastname,
+          gender: newData.gender,
+          age: newData.age,
+          email: newData.email);
       await gDbRef.insert(_guardian.toJson());
     } else {
       var tDbRef = db.collection("teachers");
@@ -126,7 +126,8 @@ Handler registerHandler({Db db}) {
           firstname: newData.firstname,
           lastname: newData.lastname,
           age: newData.age,
-          gender: newData.gender);
+          gender: newData.gender,
+          email: newData.email);
       await tDbRef.insert(_teacher.toJson());
     }
     await dbRef.insert(signUpModel.toJson());

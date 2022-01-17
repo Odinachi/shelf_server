@@ -6,6 +6,7 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import 'auth/auth.dart';
+import 'update/update.dart';
 import 'utils/constant.dart';
 import 'utils/token_manager.dart';
 
@@ -21,6 +22,9 @@ void main(List<String> args) async {
   final _router = Router();
   _router.mount(
       "/auth", AuthApi(dbRef: _db, tokenManager: tokenService).authRoute);
+  _router.mount(
+      "/update", UpdateApi(dbRef: _db, tokenManager: tokenService).authRoute);
+
   final _handler = Pipeline()
       .addMiddleware(handleCors())
       .addMiddleware(logRequests())
