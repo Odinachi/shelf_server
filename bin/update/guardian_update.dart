@@ -34,7 +34,7 @@ Handler guardianUpdatehandler({Db db}) => (Request req) async {
       if (_guardianCheck == null) {
         return Response(400,
             body: ResponseModel(
-                    status: 400, message: "invalid guardian", data: null)
+                    status: 400, message: "invalid Guardian", data: null)
                 .toJson()
                 .toString());
       }

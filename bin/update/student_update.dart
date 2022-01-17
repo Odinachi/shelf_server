@@ -35,7 +35,7 @@ Handler studentUpdatehandler({Db db}) => (Request req) async {
       if (_studentCheck == null) {
         return Response(400,
             body: ResponseModel(
-                    status: 400, message: "invalid student", data: null)
+                    status: 400, message: "invalid Student", data: null)
                 .toJson()
                 .toString());
       }

@@ -34,7 +34,7 @@ Handler teacherUpdatehandler({Db db}) => (Request req) async {
       if (_teacherCheck == null) {
         return Response(400,
             body: ResponseModel(
-                    status: 400, message: "invalid teacher", data: null)
+                    status: 400, message: "invalid Teacher", data: null)
                 .toJson()
                 .toString());
       }
