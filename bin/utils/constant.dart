@@ -12,7 +12,7 @@ final ip = InternetAddress.anyIPv4;
 final dotEnv = DotEnv(filePath: '.env');
 final port = int.parse(Platform.environment['PORT'] ?? '8080');
 final issuer = dotEnv.getDotEnv()["ISSUER"];
-final secret = dotEnv.getDotEnv()['SSECRET'];
+final secret = dotEnv.getDotEnv()['SECRET'];
 final jsonHeaders = {HttpHeaders.contentTypeHeader: ContentType.json.mimeType};
 
 hashPassword({String password, String salt}) {
@@ -27,7 +27,7 @@ hashPassword({String password, String salt}) {
 String generateJwt(
   String subject, {
   String jwtId,
-  Duration expiry = const Duration(seconds: 30),
+  Duration expiry = const Duration(hours: 3),
 }) {
   final jwt = JWT(
     {

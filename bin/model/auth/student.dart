@@ -1,23 +1,25 @@
 class Student {
-  Student({
-    this.firstname,
-    this.lastname,
-    this.gender,
-    this.age,
-    this.guardian,
-    this.registrar,
-    this.currentclass,
-  });
+  Student(
+      {this.firstname,
+      this.lastname,
+      this.gender,
+      this.age,
+      this.guardian,
+      this.registrar,
+      this.currentclass,
+      this.email});
 
   String firstname;
   String lastname;
   String gender;
   String age;
+  String email;
   String guardian;
   String registrar;
   String currentclass;
 
   factory Student.fromJson(Map<String, dynamic> json) => Student(
+        email: json["email"] == null ? null : json["email"],
         firstname: json["firstname"] == null ? null : json["firstname"],
         lastname: json["lastname"] == null ? null : json["lastname"],
         gender: json["gender"] == null ? null : json["gender"],
@@ -36,6 +38,7 @@ class Student {
         "guardian": guardian == null ? null : guardian,
         "registrar": registrar == null ? null : registrar,
         "currentclass": currentclass == null ? null : currentclass,
+        "email": email == null ? null : email,
       };
 }
 

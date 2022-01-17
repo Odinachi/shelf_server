@@ -47,6 +47,8 @@ Handler loginHandler({Db db, TokenManager tokenManager}) {
     var usernameCheck =
         await dbRef.findOne(where.eq("username", inputData.username));
 
+    var email;
+
     if (mailCheck != null) {
       var response = mailCheck;
       SignUpModel user = SignUpModel(
@@ -61,9 +63,10 @@ Handler loginHandler({Db db, TokenManager tokenManager}) {
       var verifyPassword =
           hashPassword(password: inputData.password, salt: user.salt);
       if (verifyPassword == user.password) {
-        final _userId = (mailCheck["_id"] as ObjectId).toHexString();
         try {
-          final tokenPair = await tokenManager.createTokenPair(_userId);
+          email = mailCheck["email"];
+          final tokenPair = await tokenManager.createTokenPair(email);
+          print("token pair is ${tokenPair}");
           return Response(200,
               body: ResponseModel(
                       status: 200,
@@ -102,9 +105,9 @@ Handler loginHandler({Db db, TokenManager tokenManager}) {
       var verifyPassword =
           hashPassword(password: inputData.password, salt: user.salt);
       if (verifyPassword == user.password) {
-        final _userId = (usernameCheck["_id"] as ObjectId).toHexString();
         try {
-          final tokenPair = await tokenManager.createTokenPair(_userId);
+          email = user.email;
+          final tokenPair = await tokenManager.createTokenPair(email);
           return Response(200,
               body: ResponseModel(
                       status: 200,

@@ -5,6 +5,7 @@ class Teacher {
     this.gender,
     this.age,
     this.subject,
+    this.email,
     this.currentclass,
   });
 
@@ -12,11 +13,13 @@ class Teacher {
   String lastname;
   String gender;
   String age;
+  String email;
   String subject;
   String currentclass;
 
   factory Teacher.fromJson(Map<String, dynamic> json) => Teacher(
         firstname: json["firstname"] == null ? null : json["firstname"],
+        email: json["email"] == null ? null : json["email"],
         lastname: json["lastname"] == null ? null : json["lastname"],
         gender: json["gender"] == null ? null : json["gender"],
         age: json["age"] == null ? null : json["age"],
@@ -32,6 +35,7 @@ class Teacher {
         "age": age == null ? null : age,
         "subject": subject == null ? null : subject,
         "currentclass": currentclass == null ? null : currentclass,
+        "email": email == null ? null : email,
       };
 }
 

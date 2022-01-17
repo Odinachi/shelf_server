@@ -2,7 +2,6 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import '../utils/constant.dart';
 import '../utils/token_manager.dart';
 import 'login.dart';
 import 'logout.dart';
@@ -22,8 +21,7 @@ class AuthApi {
     auth.post("/logout</|.*>", logoutHandler(tokenManager: tokenManager));
     auth.get(
         "/refreshtoken</|.*>", refreshTokenHandler(tokenManager: tokenManager));
-    final _handler = Pipeline().addMiddleware(HandleAuth()).addHandler((auth));
 
-    return _handler;
+    return auth;
   }
 }
