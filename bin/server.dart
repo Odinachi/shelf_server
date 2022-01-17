@@ -17,7 +17,7 @@ void main(List<String> args) async {
       'mongodb://dave:dave0116@cluster0-shard-00-00.nqblu.mongodb.net:27017,cluster0-shard-00-01.nqblu.mongodb.net:27017,cluster0-shard-00-02.nqblu.mongodb.net:27017/schoolhub?ssl=true&replicaSet=atlas-fecjkn-shard-0&authSource=admin&retryWrites=true&w=majority');
   await _db.open();
   print("db connection open");
-  await tokenService.start("localhost", 6379);
+  await tokenService.start("0.0.0.0", 6379);
   print("token server is up......");
 
   final _router = Router();
