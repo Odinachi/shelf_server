@@ -14,7 +14,10 @@ dart run bin/server.dart
 ```
 <br />
 
+
 #### Enpoints
+
+
 
 <pre> 1. /auth/login: logs user in and gets authentication token for other features.</pre>
 
