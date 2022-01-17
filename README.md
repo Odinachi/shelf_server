@@ -14,7 +14,7 @@ dart run bin/server.dart
 ```
 <br />
 
-####Enpoints
+#### Enpoints
 
 <pre> 1. /auth/login: logs user in and gets authentication token for other features.</pre>
 
@@ -27,7 +27,7 @@ dart run bin/server.dart
 
 <br />
 
-####Upcoming
+#### Upcoming
 1. Upload students course.
 2. Assign teachers to students.
 3. Manage student's grade.
