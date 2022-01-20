@@ -12,8 +12,8 @@ import 'utils/token_manager.dart';
 void main(List<String> args) async {
   final tokenService = TokenManager();
   final dotEnv = DotEnv(filePath: '.env').getDotEnv();
-  print("url iss ${dotEnv['DATABASEURL']}");
-  var _db = Db('${dotEnv['DATABASEURL']}');
+  var _db = Db(
+      'mongodb://dave:dave0116@cluster0-shard-00-00.nqblu.mongodb.net:27017,cluster0-shard-00-01.nqblu.mongodb.net:27017,cluster0-shard-00-02.nqblu.mongodb.net:27017/schoolhub?ssl=true&replicaSet=atlas-fecjkn-shard-0&authSource=admin&retryWrites=true&w=majority');
   await _db.open(
     secure: true,
   );
