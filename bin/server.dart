@@ -13,8 +13,7 @@ import 'utils/token_manager.dart';
 void main(List<String> args) async {
   final tokenService = TokenManager(RedisConnection());
   final dotEnv = DotEnv(filePath: '.env');
-  var _db = Db(
-      'mongodb://dave:dave0116@cluster0-shard-00-00.nqblu.mongodb.net:27017,cluster0-shard-00-01.nqblu.mongodb.net:27017,cluster0-shard-00-02.nqblu.mongodb.net:27017/schoolhub?ssl=true&replicaSet=atlas-fecjkn-shard-0&authSource=admin&retryWrites=true&w=majority');
+  var _db = Db('${dotEnv['DATABASEURL']}');
   await _db.open();
   print("db connection open");
   await tokenService.start("0.0.0.0", 6379);
