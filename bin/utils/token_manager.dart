@@ -1,47 +1,72 @@
-import 'package:redis/redis.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:uuid/uuid.dart';
 
 import 'constant.dart';
 import 'token_pair.dart';
 
 class TokenManager {
-  TokenManager(
-    this.db,
-  );
-  final RedisConnection db;
-  static Command _cache;
-  final String _prefix = 'token';
+  TokenManager();
 
-  Future<void> start(String host, int port) async {
-    _cache = await db.connect(host, port);
-  }
-
-  Future<TokenPair> createTokenPair(String userId) async {
+  Future<TokenPair> createTokenPair(
+      {String userId, DbCollection db, String email}) async {
     final tokenId = Uuid().v4();
     final token = generateJwt(userId, jwtId: tokenId);
 
-    final refreshTokenExpiry = Duration(hours: 48);
+    final refreshTokenExpiry = Duration(days: 3);
     final refreshToken = generateJwt(
       userId,
       jwtId: tokenId,
       expiry: refreshTokenExpiry,
     );
-
-    await addRefreshToken(tokenId, refreshToken, refreshTokenExpiry);
+    var hasToken = await db.findOne(where.eq("email", "${email}"));
+    if (hasToken != null) {
+      await updateRefreshToken(
+          id: tokenId,
+          token: refreshToken,
+          expiry: refreshTokenExpiry,
+          db: db,
+          email: email);
+    } else {
+      await addRefreshToken(
+          id: tokenId,
+          token: refreshToken,
+          expiry: refreshTokenExpiry,
+          db: db,
+          email: email);
+    }
 
     return TokenPair(token, refreshToken);
   }
 
-  Future<void> addRefreshToken(String id, String token, Duration expiry) async {
-    await _cache.send_object(['SET', '$_prefix:$id', token]);
-    await _cache.send_object(['EXPIRE', '$_prefix:$id', expiry.inSeconds]);
+  Future<void> addRefreshToken(
+      {String id,
+      String token,
+      Duration expiry,
+      DbCollection db,
+      String email}) async {
+    await db.insert(
+        {'email': '$email', 'refresh-token': '$token', 'time': DateTime.now()});
   }
 
-  Future<dynamic> getRefreshToken(String id) async {
-    return await _cache.get('$_prefix:$id');
+  Future<void> updateRefreshToken(
+      {String id,
+      String token,
+      Duration expiry,
+      DbCollection db,
+      String email}) async {
+    var hasToken = await db.findOne(where.eq("email", "${email}"));
+    hasToken["refresh-token"] = token;
+    hasToken['email'] = email;
+    hasToken['time'] = DateTime.now();
+    await db.save(hasToken);
   }
 
-  Future<void> removeRefreshToken(String id) async {
-    await _cache.send_object(['EXPIRE', '$_prefix:$id', '-1']);
+  Future<dynamic> getRefreshToken({String id, DbCollection db}) async {
+    dynamic _i = await db.findOne(where.eq('refresh-token', '$id'));
+    return _i != null ? _i['refresh-token'] : null;
+  }
+
+  Future<void> removeRefreshToken({String id, DbCollection db}) async {
+    await db.deleteOne(where.eq('refresh-token', '$id'));
   }
 }

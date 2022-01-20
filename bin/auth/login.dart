@@ -42,6 +42,7 @@ Handler loginHandler({Db db, TokenManager tokenManager}) {
     }
 
     var dbRef = db.collection("users");
+    var tokenRef = db.collection("tokens");
 
     var mailCheck = await dbRef.findOne(where.eq("email", inputData.email));
     var usernameCheck =
@@ -65,8 +66,8 @@ Handler loginHandler({Db db, TokenManager tokenManager}) {
       if (verifyPassword == user.password) {
         try {
           email = mailCheck["email"];
-          final tokenPair = await tokenManager.createTokenPair(email);
-          print("token pair is ${tokenPair}");
+          final tokenPair = await tokenManager.createTokenPair(
+              userId: email, db: tokenRef, email: email);
           return Response(200,
               body: ResponseModel(
                       status: 200,
@@ -107,7 +108,8 @@ Handler loginHandler({Db db, TokenManager tokenManager}) {
       if (verifyPassword == user.password) {
         try {
           email = user.email;
-          final tokenPair = await tokenManager.createTokenPair(email);
+          final tokenPair = await tokenManager.createTokenPair(
+              userId: email, db: tokenRef, email: email);
           return Response(200,
               body: ResponseModel(
                       status: 200,

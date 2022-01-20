@@ -1,6 +1,5 @@
 import 'package:dart_dotenv/dart_dotenv.dart';
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:redis/redis.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -11,14 +10,13 @@ import 'utils/constant.dart';
 import 'utils/token_manager.dart';
 
 void main(List<String> args) async {
-  final tokenService = TokenManager(RedisConnection());
-  final dotEnv = DotEnv(filePath: '.env');
-  var _db = Db(
-      'mongodb://dave:dave0116@cluster0-shard-00-00.nqblu.mongodb.net:27017,cluster0-shard-00-01.nqblu.mongodb.net:27017,cluster0-shard-00-02.nqblu.mongodb.net:27017/schoolhub?ssl=true&replicaSet=atlas-fecjkn-shard-0&authSource=admin&retryWrites=true&w=majority');
-  await _db.open();
+  final tokenService = TokenManager();
+  final dotEnv = DotEnv(filePath: '.env').getDotEnv();
+  var _db = Db('${dotEnv['DATABASEURL']}');
+  await _db.open(
+    secure: true,
+  );
   print("db connection open");
-  await tokenService.start("0.0.0.0", 6379);
-  print("token server is up......");
 
   final _router = Router();
   _router.mount(
@@ -33,5 +31,6 @@ void main(List<String> args) async {
       .addHandler(_router);
 
   final server = await serve(_handler, ip, port);
+
   print('Server listening on port  ${server.port}');
 }

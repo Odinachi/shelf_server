@@ -8,11 +8,11 @@ import 'package:shelf/shelf.dart';
 
 import '../model/auth/response_model.dart';
 
-final ip = InternetAddressType.IPv4;
-final dotEnv = DotEnv(filePath: '.env');
+final ip = '0.0.0.0';
+final dotEnv = DotEnv(filePath: '.env').getDotEnv();
 final port = int.parse(Platform.environment['PORT'] ?? '8080');
-final issuer = 'Issuer247Hash256';
-final secret = '23408080822222fffgbhhhhs';
+final issuer = '${dotEnv['ISSUER']}';
+final secret = '${dotEnv['SECRET']}';
 final jsonHeaders = {HttpHeaders.contentTypeHeader: ContentType.json.mimeType};
 
 hashPassword({String password, String salt}) {
@@ -27,7 +27,7 @@ hashPassword({String password, String salt}) {
 String generateJwt(
   String subject, {
   String jwtId,
-  Duration expiry = const Duration(hours: 3),
+  Duration expiry = const Duration(seconds: 60),
 }) {
   final jwt = JWT(
     {
@@ -49,10 +49,19 @@ dynamic verifyJwt(String token) {
   try {
     final jwt = JWT.verify(token, SecretKey(secret));
     return jwt;
+  } on FormatException catch (e) {
+    return null;
+  } on JWTParseError catch (e) {
+    return null;
+  } on JWTUndefinedError catch (e) {
+    return null;
+  } on JWTInvalidError catch (e) {
+    return null;
   } on JWTExpiredError {
     // TODO Handle error
+    return null;
   } on JWTError catch (err) {
-    print(err);
+    return null;
     // TODO Handle error
   }
 }
@@ -64,7 +73,6 @@ Middleware HandleAuth() => (Handler innerHandler) => (Request request) async {
         token = authHeader.substring(7);
         jwt = verifyJwt(token);
       }
-
       final updatedRequest = request.change(context: {"authDetails": jwt});
       return await innerHandler(updatedRequest);
     };

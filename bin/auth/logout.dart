@@ -1,10 +1,11 @@
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:shelf/shelf.dart';
 
 import '../model/auth/response_model.dart';
 import '../utils/token_manager.dart';
 
-Handler logoutHandler({TokenManager tokenManager}) => (
+Handler logoutHandler({Db db, TokenManager tokenManager}) => (
       Request request,
     ) async {
       final auth = request.context['authDetails'];
@@ -16,7 +17,9 @@ Handler logoutHandler({TokenManager tokenManager}) => (
                 .toString());
       }
       try {
-        await tokenManager.removeRefreshToken((auth as JWT).jwtId);
+        var tokenRef = db.collection("tokens");
+        await tokenManager.removeRefreshToken(
+            id: (auth as JWT).jwtId, db: tokenRef);
       } catch (e) {
         return Response(500,
             body: ResponseModel(
