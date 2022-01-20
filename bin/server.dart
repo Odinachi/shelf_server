@@ -12,6 +12,7 @@ import 'utils/token_manager.dart';
 void main(List<String> args) async {
   final tokenService = TokenManager();
   final dotEnv = DotEnv(filePath: '.env').getDotEnv();
+  print("url iss ${dotEnv['DATABASEURL']}");
   var _db = Db('${dotEnv['DATABASEURL']}');
   await _db.open(
     secure: true,
