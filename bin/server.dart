@@ -13,9 +13,7 @@ void main(List<String> args) async {
   final tokenService = TokenManager();
   final dotEnv = DotEnv(filePath: '.env').getDotEnv();
   var _db = Db('${dotEnv['DATABASEURL']}');
-  await _db.open(
-    secure: true,
-  );
+  await _db.open();
   print("db connection open");
 
   final _router = Router();
@@ -31,6 +29,5 @@ void main(List<String> args) async {
       .addHandler(_router);
 
   final server = await serve(_handler, ip, port);
-
   print('Server listening on port  ${server.port}');
 }
