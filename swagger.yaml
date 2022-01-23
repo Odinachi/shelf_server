@@ -15,8 +15,6 @@ tags:
     description: "Manage user authentication"
   - name: "update"
     description: "Update user information"
-  - name: "user"
-    description: "Operations about user"
 
 
 paths:
