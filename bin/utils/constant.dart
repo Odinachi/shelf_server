@@ -27,7 +27,7 @@ hashPassword({String password, String salt}) {
 String generateJwt(
   String subject, {
   String jwtId,
-  Duration expiry = const Duration(seconds: 60),
+  Duration expiry = const Duration(minutes: 30),
 }) {
   final jwt = JWT(
     {

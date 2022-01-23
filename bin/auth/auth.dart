@@ -5,6 +5,7 @@ import 'package:shelf_router/shelf_router.dart';
 import '../utils/token_manager.dart';
 import 'login.dart';
 import 'logout.dart';
+import 'me_handler.dart';
 import 'refresh_token_handler.dart';
 import 'register.dart';
 
@@ -19,6 +20,7 @@ class AuthApi {
         "/login</|.*>", loginHandler(db: dbRef, tokenManager: tokenManager));
     auth.post("/register</|.*>", registerHandler(db: dbRef));
     auth.post("/logout</|.*>", logoutHandler(tokenManager: tokenManager));
+    auth.get("/me</|.*>", meHandler(db: dbRef, tokenManager: tokenManager));
     auth.get("/refreshtoken</|.*>",
         refreshTokenHandler(tokenManager: tokenManager, db: dbRef));
 
