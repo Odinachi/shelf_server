@@ -1,0 +1,477 @@
+openapi: "3.0.0"
+info:
+  description: "This is a sample Dart server "
+  version: "1.0.0"
+  title: "SchoolHub Server"
+  contact:
+    email: "odinachidavid@yahoo.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: https://shelf-test.herokuapp.com
+tags:
+  - name: "auth"
+    description: "Manage user authentication"
+  - name: "update"
+    description: "Update user information"
+  - name: "user"
+    description: "Operations about user"
+
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - "auth"
+      summary: "register"
+      description: " 1 - Student, 2 - Guardian, 3 - Teacher"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterModel'
+
+      responses:
+        "400":
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+        "200":
+          description: "register successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register200'
+
+
+  /auth/login:
+    post:
+      tags:
+        - "auth"
+      summary: "login"
+      description: "can login with either username or email with a password"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+
+      responses:
+        "400":
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+        "200":
+          description: "login successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login200'
+
+
+
+  /auth/logout:
+    post:
+      tags:
+        - "auth"
+      summary: "logout"
+      description: "log current user out"
+
+      responses:
+        "400":
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+        "200":
+          description: "logout successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Logout'
+
+      security:
+        - bearerAuth: []
+
+
+  /auth/me:
+    get:
+      tags:
+        - "auth"
+      summary: "get user profile"
+      description: "get user info"
+
+      responses:
+        "200":
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register200'
+        "400":
+          description: "logout successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+
+      security:
+        - bearerAuth: []
+
+  /auth/refreshtoken:
+    post:
+      tags:
+        - "auth"
+      summary: "refresh user token"
+      description: "get a refreshed user token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenModel'
+
+      responses:
+        "200":
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login200'
+        "400":
+          description: "logout successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+
+
+
+  /update/1:
+    post:
+      tags:
+        - "update"
+      summary: "update Student info"
+      description: "change some basic information of a student. parameters are optional"
+      requestBody:
+        description: "parameters to be changed. Each of these parameters are optional"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentUpdate'
+
+
+      responses:
+        "200":
+          description: "Successful Update"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentUpdate200'
+        "400":
+          description: "logout successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+
+
+
+      security:
+        - bearerAuth: []
+  /update/2:
+    post:
+      tags:
+        - "update"
+      summary: "update Guardian info"
+      description: "change some basic information of a Guardian"
+      requestBody:
+        description: "parameters to be changed. Each of these parameters are optional"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuardianUpdate'
+
+      responses:
+        "200":
+          description: "Successful Update"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuardianUpdate200'
+        "400":
+          description: "logout successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+
+      security:
+        - bearerAuth: []
+  /update/3:
+    post:
+      tags:
+        - "update"
+      summary: "update Teacher info"
+      description: "change some basic information of a Teacher"
+
+      requestBody:
+        description: "parameters to be changed. Each of these parameters are optional"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherUpdate'
+
+      responses:
+        "200":
+          description: "Successful Update"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherUpdate200'
+        "400":
+          description: "logout successful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register400'
+
+
+      security:
+        - bearerAuth: []
+
+components:
+  schemas:
+    login:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+          example: "email@email.com"
+        username:
+          type: "string"
+        password:
+          type: "string"
+    StudentUpdate:
+      type: "object"
+      properties:
+        currentclass:
+          type: "string"
+        guardian:
+          type: "string"
+    TeacherUpdate:
+      type: "object"
+      properties:
+        currentclass:
+          type: "string"
+        subject:
+          type: "string"
+    GuardianUpdate:
+      type: "object"
+      properties:
+        homeaddress:
+          type: "string"
+        workaddress:
+          type: "string"
+    RefreshTokenModel:
+      type: "object"
+      properties:
+        refreshtoken:
+          type: "string"
+    Register200:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+        message:
+          type: "string"
+        data:
+          type: "object"
+          properties:
+            _id:
+              type: "string"
+            firstname:
+              type: "string"
+            lastname:
+              type: "string"
+            gender:
+              type: "string"
+            age:
+              type: "string"
+            email:
+              type: "string"
+            username:
+              type: "string"
+            password:
+              type: "string"
+            salt:
+              type: "string"
+    StudentUpdate200:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+        message:
+          type: "string"
+        data:
+          type: "object"
+          properties:
+            _id:
+              type: "string"
+            firstname:
+              type: "string"
+            lastname:
+              type: "string"
+            gender:
+              type: "string"
+            age:
+              type: "string"
+            email:
+              type: "string"
+            guardian:
+              type: "string"
+            registrar:
+              type: "string"
+            currentclass:
+              type: "string"
+    TeacherUpdate200:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+        message:
+          type: "string"
+        data:
+          type: "object"
+          properties:
+            _id:
+              type: "string"
+            firstname:
+              type: "string"
+            lastname:
+              type: "string"
+            gender:
+              type: "string"
+            age:
+              type: "string"
+            email:
+              type: "string"
+            subject:
+              type: "string"
+            currentclass:
+              type: "string"
+    GuardianUpdate200:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+        message:
+          type: "string"
+        data:
+          type: "object"
+          properties:
+            _id:
+              type: "string"
+            firstname:
+              type: "string"
+            lastname:
+              type: "string"
+            gender:
+              type: "string"
+            age:
+              type: "string"
+            email:
+              type: "string"
+            workaddress:
+              type: "string"
+            homeaddress:
+              type: "string"
+            ward:
+              type: "string"
+    Login200:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          example: 200
+        message:
+          type: "string"
+        data:
+          type: "object"
+          properties:
+            token:
+              type: "string"
+            refreshToken:
+              type: "string"
+    Register400:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          example: 400
+        message:
+          type: "string"
+          example: "inavlid Request"
+        data:
+          type: "string"
+          example: null
+    Logout:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+          example: 200
+        message:
+          type: "string"
+          example: "logout successful"
+        data:
+          type: "string"
+          example: null
+    RegisterModel:
+      type: "object"
+      properties:
+        firstname:
+          type: "string"
+          example: "Authur"
+        lastname:
+          type: "string"
+          example: "Gerard"
+        gender:
+          type: "string"
+          example: "male"
+        age:
+          type: "string"
+          example: "48"
+        email:
+          type: "string"
+          example: "email@email.com"
+        username:
+          type: "string"
+          example: "authurg"
+        password:
+          type: "string"
+        account-type:
+          type: "integer"
+          format: "int64"
+          example: 1
+          description: "1 - Student, 2 - Guardian, 3 - Teacher"
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
