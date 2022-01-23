@@ -19,9 +19,10 @@ class AuthApi {
     auth.post(
         "/login</|.*>", loginHandler(db: dbRef, tokenManager: tokenManager));
     auth.post("/register</|.*>", registerHandler(db: dbRef));
-    auth.post("/logout</|.*>", logoutHandler(tokenManager: tokenManager));
+    auth.post(
+        "/logout</|.*>", logoutHandler(db: dbRef, tokenManager: tokenManager));
     auth.get("/me</|.*>", meHandler(db: dbRef, tokenManager: tokenManager));
-    auth.get("/refreshtoken</|.*>",
+    auth.post("/refreshtoken</|.*>",
         refreshTokenHandler(tokenManager: tokenManager, db: dbRef));
 
     return auth;
