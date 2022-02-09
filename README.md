@@ -1,11 +1,6 @@
-A server app built using [Shelf](https://pub.dev/packages/shelf),
-configured to enable running with [Docker](https://www.docker.com/).
+A server app built using [Shelf](https://pub.dev/packages/shelf). 
 
 # Running the server
-this is neccessary to get redis running
-```
-docker-compose up -d 
-```
 
 Running our shelf server after our docker is activated
 
